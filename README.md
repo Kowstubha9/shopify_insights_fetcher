@@ -23,5 +23,3 @@ This project provides a simple API to fetch store insights from Shopify, includi
 - **Deployment:** Localhost
 
 
-git clone https://github.com/yourusername/shopify-insights.git
-cd shopify-insights
