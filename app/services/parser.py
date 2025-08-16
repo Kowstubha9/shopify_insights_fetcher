@@ -1,4 +1,3 @@
-# app/services/parser.py
 from __future__ import annotations
 
 from typing import Dict, Iterable, List, Optional, Tuple
@@ -28,7 +27,7 @@ class BrandParser:
     Transforms raw scraped content from ShopifyScraper into structured Pydantic models.
     """
 
-    # --------- public API ---------
+    # public API 
 
     def build_brand_context(
         self,
@@ -83,7 +82,7 @@ class BrandParser:
         )
         return brand
 
-    # --------- products ---------
+    # products 
 
     def _parse_products(
         self,
@@ -171,7 +170,7 @@ class BrandParser:
         currency = first.get("currency") or None  # not always present
         return price, currency
 
-    # --------- policies ---------
+    # policies
 
     def _parse_policies(
         self,
@@ -223,7 +222,7 @@ class BrandParser:
 
         return list(merged.values())
 
-    # --------- FAQs ---------
+    # FAQs
 
     def _parse_faqs(self, *, faqs_raw: List[Dict], faq_page_url: Optional[str]) -> List[FAQ]:
         faqs: List[FAQ] = []
@@ -241,7 +240,7 @@ class BrandParser:
             )
         return faqs
 
-    # --------- socials ---------
+    # socials
 
     def _parse_socials(self, social_map: Dict[str, str]) -> List[SocialHandle]:
         platform_map = {
@@ -261,7 +260,7 @@ class BrandParser:
             results.append(SocialHandle(platform=platform, handle_or_url=url))
         return results
 
-    # --------- contacts ---------
+    # contacts
 
     def _parse_contacts(self, contact_map: Dict[str, str]) -> List[ContactDetail]:
         out: List[ContactDetail] = []
@@ -273,7 +272,7 @@ class BrandParser:
             out.append(ContactDetail(type=ContactType.PHONE, value=phone))
         return out
 
-    # --------- links ---------
+    # links
 
     def _parse_links(self, base_url: str, links: List[str]) -> List[ImportantLink]:
         result: List[ImportantLink] = []
@@ -306,7 +305,7 @@ class BrandParser:
 
         return result
 
-    # --------- helpers ---------
+    # helpers 
 
     def _normalize_base(self, base_url: str) -> str:
         if not base_url.startswith("http"):

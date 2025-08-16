@@ -1,4 +1,3 @@
-# app/routes/competitor.py
 from __future__ import annotations
 from typing import List
 
@@ -38,7 +37,7 @@ def get_brand_competitors(brand_id: int, db: Session = Depends(get_db)):
     Fetch competitors for a given brand ID.
     Returns the brand and its competitors as fully detailed BrandContext objects.
     """
-    # 1. Fetch main brand
+    # Fetch main brand
     brand: Brand = db.query(Brand).filter(Brand.id == brand_id).first()
     if not brand:
         raise HTTPException(
@@ -46,15 +45,15 @@ def get_brand_competitors(brand_id: int, db: Session = Depends(get_db)):
             detail=f"Brand with id {brand_id} not found",
         )
 
-    # 2. Fetch competitors using service
+    # Fetch competitors using service
     service = CompetitorService(db)
     competitor_brands: List[Brand] = service.get_competitor_brands(brand_id)
 
-    # 3. Convert ORM to BrandContext
+    # Convert ORM to BrandContext
     main_context = _brand_to_context(brand)
     competitors_context = [_brand_to_context(c) for c in competitor_brands]
 
-    # 4. Return response
+    # Return response
     return CompetitorResponse(
         brand=main_context,
         competitors=competitors_context,

@@ -1,4 +1,3 @@
-# app/routes/brand.py
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -22,9 +21,9 @@ def fetch_brand_insights(payload: WebsiteIn, db: Session = Depends(get_db)):
     """
     base_url = str(payload.website_url)
 
-    # 1) scrape
+    # scrape
     scraper = ShopifyScraper(base_url)
-    # quick homepage check – treat as "website not found" (assignment asks to return 401)
+   
     if not scraper.fetch_html("/"):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -33,15 +32,15 @@ def fetch_brand_insights(payload: WebsiteIn, db: Session = Depends(get_db)):
 
     raw = scraper.scrape_all()
 
-    # 2) parse → BrandContext
+    # parse → BrandContext
     parser = BrandParser()
     brand_ctx = parser.build_brand_context(
         base_url=base_url,
-        brand_name=None,  # you could add a title extractor later if you want
+        brand_name=None, 
         scrape_bundle=raw,
     )
 
-    # 3) persist (transaction)
+    # persist (transaction)
     try:
         with BrandUnitOfWork(db) as uow:
             uow.brands.upsert_brand_context(brand_ctx)
@@ -52,5 +51,5 @@ def fetch_brand_insights(payload: WebsiteIn, db: Session = Depends(get_db)):
             detail=f"Failed to persist brand insights: {e}",
         )
 
-    # 4) return response (already Pydantic)
+    # return response (already Pydantic)
     return brand_ctx

@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field, HttpUrl, EmailStr
 from app.models.db_models import PolicyType, ContactType, SocialPlatform, LinkType
 
 
-# ---------- Common ----------
+# Common 
 
 class APIMessage(BaseModel):
     message: str
@@ -18,7 +18,7 @@ class WebsiteIn(BaseModel):
     website_url: HttpUrl = Field(..., description="Root URL of the Shopify store")
 
 
-# ---------- Product ----------
+# Product 
 
 class Product(BaseModel):
     id: Optional[int] = Field(None, description="Internal DB id")
@@ -37,7 +37,7 @@ class Product(BaseModel):
         from_attributes = True  # Pydantic v2 (works as orm_mode in v1)
 
 
-# ---------- Policy ----------
+#  Policy 
 
 class Policy(BaseModel):
     type: PolicyType
@@ -48,7 +48,7 @@ class Policy(BaseModel):
         from_attributes = True
 
 
-# ---------- FAQ ----------
+# FAQ 
 
 class FAQ(BaseModel):
     question: str
@@ -59,7 +59,7 @@ class FAQ(BaseModel):
         from_attributes = True
 
 
-# ---------- Social ----------
+# Social 
 
 class SocialHandle(BaseModel):
     platform: SocialPlatform
@@ -69,17 +69,17 @@ class SocialHandle(BaseModel):
         from_attributes = True
 
 
-# ---------- Contacts ----------
+# Contacts 
 
 class ContactDetail(BaseModel):
     type: ContactType
-    value: str  # email or phone; validate format at parsing layer
+    value: str  
 
     class Config:
         from_attributes = True
 
 
-# ---------- Links ----------
+# Links 
 
 class ImportantLink(BaseModel):
     link_type: LinkType
@@ -90,7 +90,7 @@ class ImportantLink(BaseModel):
         from_attributes = True
 
 
-# ---------- Brand Context (main response) ----------
+# Brand Context (main response) 
 
 class BrandContext(BaseModel):
     brand_id: Optional[int] = None
@@ -110,14 +110,14 @@ class BrandContext(BaseModel):
     scraped_at: datetime = Field(default_factory=datetime.utcnow)
 
 
-# ---------- Competitor (bonus) ----------
+#Competitor (bonus) 
 
 class CompetitorResponse(BaseModel):
     brand: BrandContext
     competitors: List[BrandContext] = []
 
 
-# ---------- Error Schemas ----------
+# Error Schemas 
 
 class ErrorResponse(BaseModel):
     detail: str

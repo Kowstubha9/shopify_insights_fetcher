@@ -1,4 +1,3 @@
-# app/services/persistence.py
 from __future__ import annotations
 
 from typing import Dict, Iterable, List, Optional, Tuple
@@ -117,12 +116,7 @@ class BrandRepository:
             self.db.flush()
             seen.add(row.id)
 
-        # Optionally: delete products no longer present (commented by default)
-        # for e in existing:
-        #     if e.id not in seen:
-        #         self.db.delete(e)
-
-    # ---------- policies ----------
+    # policies
 
     def _upsert_policies(self, brand: m.Brand, policies: Iterable[Policy]) -> None:
         existing = (
@@ -142,7 +136,7 @@ class BrandRepository:
             if p.content:
                 row.content = p.content
 
-    # ---------- faqs (replace-all simplifies drift) ----------
+    # faqs 
 
     def _replace_faqs(self, brand: m.Brand, faqs: Iterable[FAQ]) -> None:
         self.db.query(m.FAQ).filter(m.FAQ.brand_id == brand.id).delete(synchronize_session=False)
@@ -156,7 +150,7 @@ class BrandRepository:
                 )
             )
 
-    # ---------- socials ----------
+    # socials 
 
     def _upsert_socials(self, brand: m.Brand, socials: Iterable[SocialHandle]) -> None:
         existing = (
@@ -173,7 +167,7 @@ class BrandRepository:
                 self.db.add(row)
             row.handle_or_url = s.handle_or_url
 
-    # ---------- contacts ----------
+    # contacts 
 
     def _upsert_contacts(self, brand: m.Brand, contacts: Iterable[ContactDetail]) -> None:
         existing = (
@@ -190,7 +184,7 @@ class BrandRepository:
                 self.db.add(row)
             row.value = c.value
 
-    # ---------- links ----------
+    # links 
 
     def _upsert_links(self, brand: m.Brand, links: Iterable[ImportantLink]) -> None:
         existing = (
@@ -226,4 +220,4 @@ class BrandUnitOfWork:
             self.db.rollback()
         else:
             self.db.commit()
-        # session lifecycle is owned by dependency (FastAPI) – don't close here
+       
