@@ -1,4 +1,3 @@
-# app/models/db_models.py
 from __future__ import annotations
 
 from datetime import datetime
@@ -23,14 +22,13 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column, declarative_mixi
 from app.database import Base
 
 
-# ---------- Enums ----------
 
 class PolicyType(str, Enum):
     PRIVACY = "privacy_policy"
     REFUND = "refund_policy"
     RETURN = "return_policy"
-    SHIPPING = "shipping_policy"          # common on Shopify
-    TERMS = "terms_of_service"            # common on Shopify
+    SHIPPING = "shipping_policy"          
+    TERMS = "terms_of_service"            
 
 
 class ContactType(str, Enum):
@@ -58,9 +56,6 @@ class LinkType(str, Enum):
     HOMEPAGE = "homepage"
     OTHER = "other"
 
-
-# ---------- Mixins ----------
-
 @declarative_mixin
 class TimestampMixin:
     created_at: Mapped[datetime] = mapped_column(
@@ -71,7 +66,6 @@ class TimestampMixin:
     )
 
 
-# ---------- Core Entities ----------
 
 class Brand(Base, TimestampMixin):
     __tablename__ = "brands"
@@ -219,7 +213,6 @@ class ImportantLink(Base, TimestampMixin):
     )
 
 
-# ---------- Bonus: competitor mapping (self-referencing M2M) ----------
 
 class CompetitorMap(Base, TimestampMixin):
     __tablename__ = "competitor_map"
@@ -234,8 +227,6 @@ class CompetitorMap(Base, TimestampMixin):
         UniqueConstraint("brand_id", "competitor_brand_id", name="uq_competitor_pair"),
     )
 
-
-# ---------- Optional: crawl bookkeeping (helps debugging/re-scrapes) ----------
 
 class CrawlLog(Base, TimestampMixin):
     __tablename__ = "crawl_logs"
